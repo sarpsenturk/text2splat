@@ -27,6 +27,7 @@ async function getSplatGenerations() {
     name: splat.name,
     date: formatRelativeTime(splat.createdAt),
     status: splat.status,
+    splatUrl: splat.splatUrl,
   }))
 }
 
@@ -61,12 +62,19 @@ async function AppSidebar() {
             <SidebarMenu>
               {previousSplats.map((splat) => (
                 <SidebarMenuItem key={splat.id}>
-                  <SidebarMenuButton>
-                    <FileText className="h-4 w-4 flex-shrink-0" />
-                    <div className="flex flex-col min-w-0 flex-1">
-                      <span className="text-sm truncate" title={splat.name}>{splat.name}</span>
-                      <span className="text-xs text-muted-foreground truncate">{splat.date}</span>
-                    </div>
+                  <SidebarMenuButton asChild>
+                    <a 
+                      href={`http://localhost:8000/?url=${encodeURIComponent(splat.splatUrl)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 w-full"
+                    >
+                      <FileText className="h-4 w-4 flex-shrink-0" />
+                      <div className="flex flex-col min-w-0 flex-1">
+                        <span className="text-sm truncate" title={splat.name}>{splat.name}</span>
+                        <span className="text-xs text-muted-foreground truncate">{splat.date}</span>
+                      </div>
+                    </a>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}

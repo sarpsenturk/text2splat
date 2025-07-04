@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { createClient } from '@/lib/supabase/server'
 
 export async function POST(request: NextRequest) {
     try {
@@ -13,12 +14,29 @@ export async function POST(request: NextRequest) {
             )
         }
 
+        // Initialize Supabase client
+        const supabase = await createClient();
+
+        // Upload empty file to Supabase storage
+        const { data, error } = await supabase.storage
+            .from('splats')
+            .upload(`splats/${Date.now()}.ply`, new Blob(), {
+                contentType: 'application/octet-stream',
+            });
+        if (error) {
+            console.error('Error uploading file to Supabase:', error)
+            return NextResponse.json(
+                { error: 'Failed to upload file to Supabase' },
+                { status: 500 }
+            )
+        }
+
         // Create a new splat generation record
         const splatGeneration = await prisma.splatGeneration.create({
             data: {
                 name,
                 prompt,
-                splatUrl: `https://example.com/splats/${Date.now()}.splat`, // Placeholder URL
+                splatUrl: data.fullPath,
                 status: 'pending',
             },
         })

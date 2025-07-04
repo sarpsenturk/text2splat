@@ -1,6 +1,3 @@
-import { Button } from "@/components/ui/button"
-import { Textarea } from "@/components/ui/textarea"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import {
   Sidebar,
   SidebarContent,
@@ -15,6 +12,7 @@ import {
 } from "@/components/ui/sidebar"
 import { FileText, Sparkles, History } from "lucide-react"
 import { prisma } from "@/lib/prisma"
+import { SplatGenerationForm } from "@/components/SplatGenerationForm"
 
 async function getSplatGenerations() {
   const splats = await prisma.splatGeneration.findMany({
@@ -63,7 +61,7 @@ async function AppSidebar() {
               {previousSplats.map((splat) => (
                 <SidebarMenuItem key={splat.id}>
                   <SidebarMenuButton asChild>
-                    <a 
+                    <a
                       href={`http://localhost:8000/?url=${encodeURIComponent(splat.splatUrl)}`}
                       target="_blank"
                       rel="noopener noreferrer"
@@ -100,28 +98,7 @@ function MainContent() {
       </header>
 
       <div className="flex-1 flex items-center justify-center p-6">
-        <Card className="w-full max-w-2xl">
-          <CardHeader>
-            <CardTitle className="text-center">Generate 3D Gaussian Splat</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <label htmlFor="prompt" className="text-sm font-medium">
-                Enter your text prompt
-              </label>
-              <Textarea
-                id="prompt"
-                placeholder="Describe the scene you want to generate..."
-                className="min-h-[100px] resize-none"
-                rows={4}
-              />
-            </div>
-            <Button className="w-full" size="lg">
-              <Sparkles className="mr-2 h-4 w-4" />
-              Generate Splat
-            </Button>
-          </CardContent>
-        </Card>
+        <SplatGenerationForm />
       </div>
     </main>
   )

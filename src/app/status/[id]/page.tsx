@@ -1,11 +1,11 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Loader2, ArrowLeft, Clock } from "lucide-react"
+import { Loader2, ArrowLeft, Clock, Download, Eye } from "lucide-react"
 import { prisma } from "@/lib/prisma"
 import { notFound } from "next/navigation"
 import Link from "next/link"
 
-interface PendingPageProps {
+interface StatusPageProps {
     params: {
         id: string
     }
@@ -23,7 +23,7 @@ async function getSplatGeneration(id: string) {
     return splat
 }
 
-export default async function PendingPage({ params }: PendingPageProps) {
+export default async function StatusPage({ params }: StatusPageProps) {
     const splat = await getSplatGeneration(params.id)
 
     const getStatusDisplay = (status: string) => {
@@ -103,21 +103,33 @@ export default async function PendingPage({ params }: PendingPageProps) {
                             </div>
                             <div>
                                 <h4 className="font-medium">ID:</h4>
-                                <p className="text-sm text-muted-foreground font-mono">{splat.id}</p>
+                                <p className="text-sm text-muted-foreground font-mono truncate">{splat.id}</p>
                             </div>
                         </div>
 
                         {splat.status === 'completed' && (
-                            <div className="pt-4">
-                                <Button asChild className="w-full" size="lg">
-                                    <a
-                                        href={`http://localhost:8000/?url=${encodeURIComponent(splat.splatUrl)}`}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                    >
-                                        View Splat
-                                    </a>
-                                </Button>
+                            <div className="pt-4 space-y-3">
+                                <div className="flex gap-3">
+                                    <Button asChild className="flex-1" size="lg">
+                                        <a
+                                            href={`https://antimatter15.com/splat/?url=${encodeURIComponent(splat.splatUrl)}`}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                        >
+                                            <Eye className="mr-2 h-4 w-4" />
+                                            View Splat
+                                        </a>
+                                    </Button>
+                                    <Button asChild variant="outline" className="flex-1" size="lg">
+                                        <a
+                                            href={splat.splatUrl}
+                                            download
+                                        >
+                                            <Download className="mr-2 h-4 w-4" />
+                                            Download
+                                        </a>
+                                    </Button>
+                                </div>
                             </div>
                         )}
 

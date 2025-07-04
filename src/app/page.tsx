@@ -32,6 +32,7 @@ async function getSplatGenerations() {
 function formatRelativeTime(date: Date): string {
   const now = new Date()
   const diff = now.getTime() - date.getTime()
+  console.log({ date, now, diff })
 
   const minutes = Math.floor(diff / (1000 * 60))
   const hours = Math.floor(diff / (1000 * 60 * 60))
@@ -62,13 +63,7 @@ async function AppSidebar() {
                 <SidebarMenuItem key={splat.id}>
                   <SidebarMenuButton asChild>
                     <a
-                      href={
-                        splat.status === 'pending'
-                          ? `/status/${splat.id}`
-                          : `http://localhost:8000/?url=${encodeURIComponent(splat.splatUrl)}`
-                      }
-                      target={splat.status === 'pending' ? '_self' : '_blank'}
-                      rel={splat.status === 'pending' ? undefined : 'noopener noreferrer'}
+                      href={`/status/${splat.id}`}
                       className="flex items-center gap-2 w-full"
                     >
                       <FileText className="h-4 w-4 flex-shrink-0" />
@@ -77,7 +72,7 @@ async function AppSidebar() {
                         <div className="flex items-center gap-2">
                           <span className="text-xs text-muted-foreground truncate">{splat.date}</span>
                           {splat.status === 'pending' && (
-                            <span className="text-xs bg-yellow-100 text-yellow-800 px-1.5 py-0.5 rounded text-center">
+                            <span className="text-xs bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 px-1.5 py-0.5 rounded text-center">
                               Pending
                             </span>
                           )}

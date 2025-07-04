@@ -13,6 +13,7 @@ import {
 import { FileText, Sparkles, History } from "lucide-react"
 import { prisma } from "@/lib/prisma"
 import { SplatGenerationForm } from "@/components/SplatGenerationForm"
+import { ModeToggle } from "@/components/mode-toggle"
 
 async function getSplatGenerations() {
   const splats = await prisma.splatGeneration.findMany({
@@ -32,7 +33,6 @@ async function getSplatGenerations() {
 function formatRelativeTime(date: Date): string {
   const now = new Date()
   const diff = now.getTime() - date.getTime()
-  console.log({ date, now, diff })
 
   const minutes = Math.floor(diff / (1000 * 60))
   const hours = Math.floor(diff / (1000 * 60 * 60))
@@ -94,12 +94,13 @@ function MainContent() {
   return (
     <main className="flex-1 flex flex-col">
       <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="flex h-14 items-center px-4 lg:px-6">
-          <SidebarTrigger className="mr-2" />
+        <div className="flex h-14 items-center justify-between px-4 lg:px-6">
           <div className="flex items-center gap-2">
+            <SidebarTrigger className="mr-2" />
             <Sparkles className="h-6 w-6" />
             <h1 className="text-lg font-semibold">Text2Splat</h1>
           </div>
+          <ModeToggle />
         </div>
       </header>
 

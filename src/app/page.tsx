@@ -62,15 +62,26 @@ async function AppSidebar() {
                 <SidebarMenuItem key={splat.id}>
                   <SidebarMenuButton asChild>
                     <a
-                      href={`http://localhost:8000/?url=${encodeURIComponent(splat.splatUrl)}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                      href={
+                        splat.status === 'pending'
+                          ? `/status/${splat.id}`
+                          : `http://localhost:8000/?url=${encodeURIComponent(splat.splatUrl)}`
+                      }
+                      target={splat.status === 'pending' ? '_self' : '_blank'}
+                      rel={splat.status === 'pending' ? undefined : 'noopener noreferrer'}
                       className="flex items-center gap-2 w-full"
                     >
                       <FileText className="h-4 w-4 flex-shrink-0" />
                       <div className="flex flex-col min-w-0 flex-1">
                         <span className="text-sm truncate" title={splat.name}>{splat.name}</span>
-                        <span className="text-xs text-muted-foreground truncate">{splat.date}</span>
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs text-muted-foreground truncate">{splat.date}</span>
+                          {splat.status === 'pending' && (
+                            <span className="text-xs bg-yellow-100 text-yellow-800 px-1.5 py-0.5 rounded text-center">
+                              Pending
+                            </span>
+                          )}
+                        </div>
                       </div>
                     </a>
                   </SidebarMenuButton>
